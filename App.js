@@ -7,69 +7,76 @@ import { Ionicons } from '@expo/vector-icons';
 import { NotificationIcon } from './components/Icons';
 import Logo from './components/Logo';
 import Course from './components/Course';
+import Menu from './components/Menu';
 
-export default function App() {
-	return (
-		<Container>
-			<SafeAreaView>
-				<ScrollView>
-					<StatusBar style="auto" />
-					<TitleBar>
-						<Avatar source={require('./assets/avatar.jpg')} />
-						<Title>Welcome back,</Title>
-						<Name>Filano</Name>
-						<NotificationIcon
-							style={{ position: 'absolute', right: 20, top: 5 }}
-						/>
-					</TitleBar>
-					<ScrollView
-						horizontal={true}
-						showsHorizontalScrollIndicator={false}
-						style={{
-							flexDirection: 'row',
-							padding: 20,
-							paddingLeft: 12,
-							paddingTop: 30,
-						}}
-					>
-						{LogoArray.map((logo, index) => (
-							<Logo key={index} Image={logo.Image} Text={logo.Text} />
-						))}
-					</ScrollView>
-					<Subtitle>Continue Learning</Subtitle>
-					<ScrollView
-						horizontal={true}
-						style={{ paddingBottom: 30 }}
-						showsHorizontalScrollIndicator={false}
-					>
-						{CardArray.map((card, index) => (
-							<Card
+class App extends React.Component {
+	render() {
+		return (
+			<Container>
+				<Menu />
+				<SafeAreaView>
+					<ScrollView>
+						<StatusBar style="auto" />
+						<TitleBar>
+							<Avatar source={require('./assets/avatar.jpg')} />
+							<Title>Welcome back,</Title>
+							<Name>Filano</Name>
+							<NotificationIcon
+								style={{ position: 'absolute', right: 20, top: 5 }}
+							/>
+						</TitleBar>
+						<ScrollView
+							horizontal={true}
+							showsHorizontalScrollIndicator={false}
+							style={{
+								flexDirection: 'row',
+								padding: 20,
+								paddingLeft: 12,
+								paddingTop: 30,
+							}}
+						>
+							{LogoArray.map((logo, index) => (
+								<Logo key={index} Image={logo.Image} Text={logo.Text} />
+							))}
+						</ScrollView>
+						<Subtitle>Continue Learning</Subtitle>
+						<ScrollView
+							horizontal={true}
+							style={{ paddingBottom: 30 }}
+							showsHorizontalScrollIndicator={false}
+						>
+							{CardArray.map((card, index) => (
+								<Card
+									key={index}
+									Title={card.Title}
+									Image={card.Image}
+									Caption={card.Caption}
+									Logo={card.Logo}
+									Subtitle={card.Subtitle}
+								/>
+							))}
+						</ScrollView>
+						<Subtitle>Related Courses</Subtitle>
+						{CourseArray.map((course, index) => (
+							<Course
 								key={index}
-								Title={card.Title}
-								Image={card.Image}
-								Caption={card.Caption}
-								Logo={card.Logo}
-								Subtitle={card.Subtitle}
+								Title={course.Title}
+								Image={course.Image}
+								Logo={course.Logo}
+								Caption={course.Caption}
+								Avatar={course.Avatar}
+								Subtitle={course.Subtitle}
+								Name={course.Name}
 							/>
 						))}
 					</ScrollView>
-					<Subtitle>Related Courses</Subtitle>
-					{CourseArray.map((course, index) => (
-						<Course
-							Title={course.Title}
-							Image={course.Image}
-							Logo={course.Logo}
-							Caption={course.Caption}
-							Avatar={course.Avatar}
-							Subtitle={course.Subtitle}
-							Name={course.Name}
-						/>
-					))}
-				</ScrollView>
-			</SafeAreaView>
-		</Container>
-	);
+				</SafeAreaView>
+			</Container>
+		);
+	}
 }
+
+export default App;
 
 const Container = styled.View`
 	background: #f0f3f5;
