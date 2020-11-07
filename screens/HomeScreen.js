@@ -9,15 +9,51 @@ import {
 } from 'react-native';
 import styled from 'styled-components';
 import Card from '../components/Card';
-import { Ionicons } from '@expo/vector-icons';
 import { NotificationIcon } from '../components/Icons';
 import Logo from '../components/Logo';
 import Course from '../components/Course';
 import Menu from '../components/Menu';
 import { connect } from 'react-redux';
+import Avatar from '../components/Avatar';
+import { Query } from 'react-apollo';
+import gql from 'graphql-tag';
+
+const CardQuery = gql`
+	{
+		cardsCollection {
+			items {
+				title
+				subtitle
+				image {
+					title
+					description
+					contentType
+					fileName
+					size
+					url
+					width
+					height
+				}
+				subtitle
+				caption
+				logo {
+					title
+					description
+					contentType
+					fileName
+					size
+					url
+					width
+					height
+				}
+			}
+		}
+	}
+`;
 
 function mapStateToProps(state) {
-	return { action: state.action };
+	console.log(state.name);
+	return { action: state.action, name: state.name };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -30,6 +66,10 @@ function mapDispatchToProps(dispatch) {
 }
 
 class HomeScreen extends React.Component {
+	static navigationOptions = {
+		headerShown: false,
+	};
+
 	state = {
 		scale: new Animated.Value(1),
 		opacity: new Animated.Value(1),
@@ -81,17 +121,16 @@ class HomeScreen extends React.Component {
 					}}
 				>
 					<SafeAreaView>
-						<ScrollView>
-							<StatusBar style="auto" />
+						<ScrollView showsVerticalScrollIndicator={false}>
 							<TitleBar>
 								<TouchableOpacity
 									onPress={this.props.openMenu}
 									style={{ position: 'absolute', top: 0, left: 0 }}
 								>
-									<Avatar source={require('../assets/avatar.jpg')} />
+									<Avatar />
 								</TouchableOpacity>
 								<Title>Welcome back,</Title>
-								<Name>Filano</Name>
+								<Name>{this.props.name}</Name>
 								<NotificationIcon
 									style={{ position: 'absolute', right: 20, top: 5 }}
 								/>
@@ -111,22 +150,39 @@ class HomeScreen extends React.Component {
 								))}
 							</ScrollView>
 							<Subtitle>Continue Learning</Subtitle>
-							<ScrollView
-								horizontal={true}
-								style={{ paddingBottom: 30 }}
-								showsHorizontalScrollIndicator={false}
-							>
-								{CardArray.map((card, index) => (
-									<Card
-										key={index}
-										Title={card.Title}
-										Image={card.Image}
-										Caption={card.Caption}
-										Logo={card.Logo}
-										Subtitle={card.Subtitle}
-									/>
-								))}
-							</ScrollView>
+							<Query query={CardQuery}>
+								{({ loading, error, data }) => {
+									if (loading) return <Message>Loading...</Message>;
+									if (error) return <Message>Error...</Message>;
+
+									return (
+										<ScrollView
+											horizontal={true}
+											style={{ paddingBottom: 30 }}
+											showsHorizontalScrollIndicator={false}
+										>
+											{data.cardsCollection.items.map((card, index) => (
+												<TouchableOpacity
+													key={index}
+													onPress={() => {
+														this.props.navigation.push('Section', {
+															section: card,
+														});
+													}}
+												>
+													<Card
+														Title={card.title}
+														Image={card.image}
+														Caption={card.caption}
+														Logo={card.logo}
+														Subtitle={card.subtitle}
+													/>
+												</TouchableOpacity>
+											))}
+										</ScrollView>
+									);
+								}}
+							</Query>
 							<Subtitle>Related Courses</Subtitle>
 							{CourseArray.map((course, index) => (
 								<Course
@@ -158,7 +214,8 @@ const RootView = styled.View`
 const Container = styled.View`
 	background: #f0f3f5;
 	flex: 1;
-	border-radius: 10px;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
 `;
 
 const AnimatedContainer = Animated.createAnimatedComponent(Container);
@@ -167,16 +224,6 @@ const TitleBar = styled.View`
 	width: 100%;
 	margin-top: 50px;
 	padding-left: 80px;
-`;
-
-const Avatar = styled.Image`
-	width: 44px;
-	height: 44px;
-	background: black;
-	border-radius: 22px;
-	margin-left: 20px;
-	top: 0;
-	left: 0;
 `;
 
 const Title = styled.Text`
@@ -198,6 +245,13 @@ const Subtitle = styled.Text`
 	margin-left: 20px;
 	margin-top: 20px;
 	text-transform: uppercase;
+`;
+
+const Message = styled.Text`
+	margin: 20px;
+	color: #b8bece;
+	font-size: 15px;
+	font-weight: 500;
 `;
 
 const LogoArray = [
