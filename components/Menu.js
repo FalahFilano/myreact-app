@@ -37,6 +37,7 @@ class Menu extends React.Component {
 		if (this.props.action == 'openMenu') {
 			Animated.spring(this.state.top, {
 				toValue: 54,
+				useNativeDriver: false,
 			}).start();
 		}
 
@@ -45,6 +46,7 @@ class Menu extends React.Component {
 				toValue: screenHeight,
 				duration: 200,
 				easing: Easing.in(),
+				useNativeDriver: false,
 			}).start();
 		}
 	};

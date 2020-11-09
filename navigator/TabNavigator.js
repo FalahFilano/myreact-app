@@ -6,6 +6,7 @@ import SectionScreen from '../screens/SectionScreen';
 import { Ionicons } from '@expo/vector-icons';
 import CourseScreen from '../screens/CourseScreen';
 import ProjectsScreen from '../screens/ProjectsScreen';
+import Menu from '../components/Menu';
 
 const activeColor = '#4775f2';
 const inactiveColor = '#b8bece';
@@ -14,6 +15,7 @@ const HomeStack = createStackNavigator(
 	{
 		Home: HomeScreen,
 		Section: SectionScreen,
+		Menu: Menu,
 	},
 	{
 		mode: 'modal',

@@ -46,6 +46,7 @@ const CardQuery = gql`
 					width
 					height
 				}
+				content
 			}
 		}
 	}
@@ -88,10 +89,12 @@ class HomeScreen extends React.Component {
 			Animated.timing(this.state.scale, {
 				toValue: 0.9,
 				duration: 300,
+				useNativeDriver: false,
 				easing: Easing.in(),
 			}).start();
 			Animated.spring(this.state.opacity, {
 				toValue: 0.5,
+				useNativeDriver: false,
 			}).start();
 
 			StatusBar.setBarStyle('light-content', true);
@@ -101,9 +104,11 @@ class HomeScreen extends React.Component {
 				toValue: 1,
 				duration: 300,
 				easing: Easing.in(),
+				useNativeDriver: false,
 			}).start();
 			Animated.spring(this.state.opacity, {
 				toValue: 1,
+				useNativeDriver: false,
 			}).start();
 
 			StatusBar.setBarStyle('dark-content', true);
@@ -154,7 +159,6 @@ class HomeScreen extends React.Component {
 								{({ loading, error, data }) => {
 									if (loading) return <Message>Loading...</Message>;
 									if (error) return <Message>Error...</Message>;
-
 									return (
 										<ScrollView
 											horizontal={true}
@@ -176,6 +180,7 @@ class HomeScreen extends React.Component {
 														Caption={card.caption}
 														Logo={card.logo}
 														Subtitle={card.subtitle}
+														Content={card.content}
 													/>
 												</TouchableOpacity>
 											))}
