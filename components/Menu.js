@@ -5,6 +5,10 @@ import { Ionicons } from '@expo/vector-icons';
 import MenuItem from './MenuItem';
 import { connect } from 'react-redux';
 
+const screenWidth = Dimensions.get('window').width;
+var cardWidth = screenWidth;
+if (screenWidth > 500) cardWidth = 500;
+
 function mapStateToProps(state) {
 	return { action: state.action };
 }
@@ -93,7 +97,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(Menu);
 const Container = styled.View`
 	position: absolute;
 	background: white;
-	width: 100%;
+	width: ${cardWidth};
+	align-self: center;
 	height: 100%;
 	z-index: 100;
 	border-radius: 10px;

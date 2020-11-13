@@ -6,6 +6,7 @@ import {
 	Animated,
 	Easing,
 	StatusBar,
+	Platform,
 } from 'react-native';
 import styled from 'styled-components';
 import Card from '../components/Card';
@@ -78,6 +79,7 @@ class HomeScreen extends React.Component {
 
 	componentDidMount() {
 		StatusBar.setBarStyle('dark-content', true);
+		if (Platform.OS == 'android') StatusBar.setBarStyle('light-content', true);
 	}
 
 	componentDidUpdate() {
@@ -189,18 +191,20 @@ class HomeScreen extends React.Component {
 								}}
 							</Query>
 							<Subtitle>Related Courses</Subtitle>
-							{CourseArray.map((course, index) => (
-								<Course
-									key={index}
-									Title={course.Title}
-									Image={course.Image}
-									Logo={course.Logo}
-									Caption={course.Caption}
-									Avatar={course.Avatar}
-									Subtitle={course.Subtitle}
-									Name={course.Name}
-								/>
-							))}
+							<CourseContainer>
+								{CourseArray.map((course, index) => (
+									<Course
+										key={index}
+										Title={course.Title}
+										Image={course.Image}
+										Logo={course.Logo}
+										Caption={course.Caption}
+										Avatar={course.Avatar}
+										Subtitle={course.Subtitle}
+										Name={course.Name}
+									/>
+								))}
+							</CourseContainer>
 						</ScrollView>
 					</SafeAreaView>
 				</AnimatedContainer>
@@ -248,7 +252,6 @@ const Subtitle = styled.Text`
 	font-weight: 600;
 	font-size: 15px;
 	margin-left: 20px;
-	margin-top: 20px;
 	text-transform: uppercase;
 `;
 
@@ -257,6 +260,12 @@ const Message = styled.Text`
 	color: #b8bece;
 	font-size: 15px;
 	font-weight: 500;
+`;
+
+const CourseContainer = styled.View`
+	flex-direction: row;
+	flex-wrap: wrap;
+	margin-left: 10px;
 `;
 
 const LogoArray = [

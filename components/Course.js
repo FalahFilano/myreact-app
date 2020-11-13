@@ -1,23 +1,53 @@
 import React from 'react';
+import { Dimensions } from 'react-native';
 import styled from 'styled-components';
 
-const Course = (props) => (
-	<Container>
-		<Cover>
-			<Image source={props.Image} />
-			<Logo source={props.Logo} resizeMode="contain" />
-			<Caption>{props.Caption}</Caption>
-			<Title>{props.Title}</Title>
-		</Cover>
-		<Content>
-			<Avatar source={props.Avatar} />
-			<VerticalWrapper>
-				<Subtitle>{props.Subtitle}</Subtitle>
-				<Name>{props.Name}</Name>
-			</VerticalWrapper>
-		</Content>
-	</Container>
-);
+const screenWidth = Dimensions.get('window').width;
+
+function getScreenWidth(screenWidth) {
+	var cardWidth = screenWidth - 40;
+
+	if (screenWidth >= 768) cardWidth = (screenWidth - 60) / 2;
+	if (screenWidth > 1024) cardWidth = (screenWidth - 80) / 3;
+	return cardWidth;
+}
+
+class Course extends React.Component {
+	state = {
+		cardWidth: getScreenWidth(screenWidth),
+	};
+
+	componentDidMount() {
+		Dimensions.addEventListener('change', this.adaptLayout);
+	}
+
+	adaptLayout = (dimensions) => {
+		this.setState({
+			cardWidth: getScreenWidth(dimensions.window.width),
+		});
+	};
+
+	render() {
+		return (
+			<Container style={{ width: this.state.cardWidth }}>
+				<Cover>
+					<Image source={this.props.Image} />
+					<Logo source={this.props.Logo} resizeMode="contain" />
+					<Caption>{this.props.Caption}</Caption>
+					<Title>{this.props.Title}</Title>
+				</Cover>
+				<Content>
+					<Avatar source={this.props.Avatar} />
+					<VerticalWrapper>
+						<Subtitle>{this.props.Subtitle}</Subtitle>
+						<Name>{this.props.Name}</Name>
+					</VerticalWrapper>
+				</Content>
+			</Container>
+		);
+	}
+}
+
 export default Course;
 
 const Container = styled.View`
@@ -25,8 +55,8 @@ const Container = styled.View`
 	height: 335px;
 	border-radius: 14px;
 	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-	margin-left: 20px;
-	margin-right: 20px;
+	margin-left: 10px;
+	margin-right: 10px;
 	margin-top: 20px;
 `;
 

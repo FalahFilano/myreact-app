@@ -25,6 +25,7 @@ class SectionScreen extends React.Component {
 
 	componentWillUnmount() {
 		StatusBar.setBarStyle('dark-content', true);
+		if (Platform.OS == 'android') StatusBar.setBarStyle('light-content', true);
 	}
 
 	render() {
